@@ -7,7 +7,7 @@ import java.awt.Color;
 public class MazeSquare {
 
   private MazeSquare up, down, left, right, prev;
-  private int row, col;
+  private int row, col, distToEnd;
   private Color c;
 
   /**
@@ -21,7 +21,7 @@ public class MazeSquare {
    * @param c the color of the square.
    */
 
-  public MazeSquare(MazeSquare up, MazeSquare down, MazeSquare left, MazeSquare right, int row, int col, Color c) {
+  public MazeSquare(MazeSquare up, MazeSquare down, MazeSquare left, MazeSquare right, int row, int col, int distToEnd, Color c) {
     this.up = up;
     this.down = down;
     this.left = left;
@@ -30,6 +30,7 @@ public class MazeSquare {
     this.col = col;
     this.c = c;
     this.prev = null;
+    this.distToEnd = distToEnd;
   }
 
   /**
@@ -165,5 +166,14 @@ public class MazeSquare {
 
   public int getCol() {
     return this.col;
+  }
+
+  /**
+   * gets the distance to the end from the current square.
+   * @return distance to the end.
+   */
+
+  public int getDistToEnd() {
+    return this.distToEnd;
   }
 }

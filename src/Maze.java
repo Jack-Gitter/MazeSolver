@@ -6,9 +6,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.Buffer;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -44,7 +46,7 @@ public class Maze {
   private void initMaze() {
     for (int i = 0; i < this.mazeImg.getHeight(); i++) {
       for (int j = 0; j < this.mazeImg.getWidth(); j++) {
-        maze[i][j] = new MazeSquare(null, null, null, null, i, j, new Color(mazeImg.getRGB(j,i)));
+        maze[i][j] = new MazeSquare(null, null, null, null, i, j, i - mazeImg.getHeight(), new Color(mazeImg.getRGB(j,i)));
       }
     }
     for (int i = 0; i < this.mazeImg.getHeight(); i++) {
@@ -77,7 +79,7 @@ public class Maze {
    * solves the maze.
    */
 
-  public void solveMaze() {
+  public void solveMazeFloodFill() {
     MazeSquare startSquare = this.findStartSquare();
     Deque<MazeSquare> dq = new LinkedList<MazeSquare>();
     List<MazeSquare> visited = new ArrayList<MazeSquare>();
@@ -117,6 +119,50 @@ public class Maze {
     this.getSolvedMaze();
   }
 
+  public void solveMazePriorityQueue() {
+    MazeSquare startSquare = this.findStartSquare();
+    Comparator<MazeSquare> c = (m1, m2) -> m2.getDistToEnd() - m1.getDistToEnd();
+    PriorityQueue<MazeSquare> pq = new PriorityQueue<>(c);
+    List<MazeSquare> visited = new ArrayList<MazeSquare>();
+    if (startSquare == null) {
+      throw new IllegalArgumentException("You have given an invalid maze");
+    }
+    pq.add(startSquare);
+    while (pq.size() != 0) {
+      MazeSquare curr = pq.poll();
+      visited.add(curr);
+      System.out.println("row: " + curr.getRow());
+      System.out.println("col: " + curr.getCol());
+      System.out.println("disttoend: " + curr.getDistToEnd());
+      if (curr.getRow() == this.mazeImg.getHeight() - 1 && curr.getColor().equals(Color.WHITE)) {
+        this.setAllPrevToRed(curr);
+        break;
+      }
+      if (curr.getUp() != null && !visited.contains(curr.getUp()) && curr.getColor().equals(Color.WHITE)) {
+        pq.add(curr.getUp());
+        visited.add(curr.getUp());
+        curr.getUp().setPrev(curr);
+      }
+      if (curr.getDown() != null && !visited.contains(curr.getDown()) && curr.getColor().equals(Color.WHITE)) {
+        pq.add(curr.getDown());
+        visited.add(curr.getDown());
+        curr.getDown().setPrev(curr);
+      }
+      if (curr.getLeft() != null && !visited.contains(curr.getLeft()) && curr.getColor().equals(Color.WHITE)) {
+        pq.add(curr.getLeft());
+        visited.add(curr.getLeft());
+        curr.getLeft().setPrev(curr);
+      }
+      if (curr.getRight() != null && !visited.contains(curr.getRight()) && curr.getColor().equals(Color.WHITE)) {
+        pq.add(curr.getRight());
+        visited.add(curr.getRight());
+        curr.getRight().setPrev(curr);
+      }
+    }
+
+    this.getSolvedMaze();
+  }
+
   /**
    * Sets the path from start to finish to red pixels.
    * @param curr the current maze square to set red.
@@ -126,7 +172,6 @@ public class Maze {
 
     while(curr != null) {
       this.mazeImg.setRGB(curr.getCol(), curr.getRow(), Color.red.getRGB());
-      curr.setColor(Color.red);
       curr = curr.getPrev();
     }
 

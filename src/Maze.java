@@ -131,9 +131,6 @@ public class Maze {
     while (pq.size() != 0) {
       MazeSquare curr = pq.poll();
       visited.add(curr);
-      System.out.println("row: " + curr.getRow());
-      System.out.println("col: " + curr.getCol());
-      System.out.println("disttoend: " + curr.getDistToEnd());
       if (curr.getRow() == this.mazeImg.getHeight() - 1 && curr.getColor().equals(Color.WHITE)) {
         this.setAllPrevToRed(curr);
         break;

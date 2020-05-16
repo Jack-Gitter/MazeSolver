@@ -94,22 +94,22 @@ public class Maze {
         this.setAllPrevToRed(curr);
         break;
       }
-      if (curr.getUp() != null && !visited.contains(curr.getUp()) && curr.getColor().equals(Color.WHITE)) {
+      if (curr.getUp() != null && !visited.contains(curr.getUp()) && curr.getColor().equals(Color.WHITE) && !this.xPixelsWithinBlack(curr.getUp(), this.getStartWidth() / 2)) {
         dq.offerLast(curr.getUp());
         visited.add(curr.getUp());
         curr.getUp().setPrev(curr);
       }
-      if (curr.getDown() != null && !visited.contains(curr.getDown()) && curr.getColor().equals(Color.WHITE)) {
+      if (curr.getDown() != null && !visited.contains(curr.getDown()) && curr.getColor().equals(Color.WHITE) && !this.xPixelsWithinBlack(curr.getDown(), this.getStartWidth() / 2)) {
         dq.offerLast(curr.getDown());
         visited.add(curr.getDown());
         curr.getDown().setPrev(curr);
       }
-      if (curr.getLeft() != null && !visited.contains(curr.getLeft()) && curr.getColor().equals(Color.WHITE)) {
+      if (curr.getLeft() != null && !visited.contains(curr.getLeft()) && curr.getColor().equals(Color.WHITE) && !this.xPixelsWithinBlack(curr.getLeft(), this.getStartWidth() / 2)) {
         dq.offerLast(curr.getLeft());
         visited.add(curr.getLeft());
         curr.getLeft().setPrev(curr);
       }
-      if (curr.getRight() != null && !visited.contains(curr.getRight()) && curr.getColor().equals(Color.WHITE)) {
+      if (curr.getRight() != null && !visited.contains(curr.getRight()) && curr.getColor().equals(Color.WHITE) && !this.xPixelsWithinBlack(curr.getRight(), this.getStartWidth() / 2)) {
         dq.offerLast(curr.getRight());
         visited.add(curr.getRight());
         curr.getRight().setPrev(curr);
@@ -135,22 +135,22 @@ public class Maze {
         this.setAllPrevToRed(curr);
         break;
       }
-      if (curr.getUp() != null && !visited.contains(curr.getUp()) && curr.getColor().equals(Color.WHITE)) {
+      if (curr.getUp() != null && !visited.contains(curr.getUp()) && curr.getColor().equals(Color.WHITE) && !this.xPixelsWithinBlack(curr.getUp(), this.getStartWidth() / 2)) {
         pq.add(curr.getUp());
         visited.add(curr.getUp());
         curr.getUp().setPrev(curr);
       }
-      if (curr.getDown() != null && !visited.contains(curr.getDown()) && curr.getColor().equals(Color.WHITE)) {
+      if (curr.getDown() != null && !visited.contains(curr.getDown()) && curr.getColor().equals(Color.WHITE) && !this.xPixelsWithinBlack(curr.getDown(), this.getStartWidth() / 2)) {
         pq.add(curr.getDown());
         visited.add(curr.getDown());
         curr.getDown().setPrev(curr);
       }
-      if (curr.getLeft() != null && !visited.contains(curr.getLeft()) && curr.getColor().equals(Color.WHITE)) {
+      if (curr.getLeft() != null && !visited.contains(curr.getLeft()) && curr.getColor().equals(Color.WHITE) && !this.xPixelsWithinBlack(curr.getLeft(), this.getStartWidth() / 2)) {
         pq.add(curr.getLeft());
         visited.add(curr.getLeft());
         curr.getLeft().setPrev(curr);
       }
-      if (curr.getRight() != null && !visited.contains(curr.getRight()) && curr.getColor().equals(Color.WHITE)) {
+      if (curr.getRight() != null && !visited.contains(curr.getRight()) && curr.getColor().equals(Color.WHITE) && !this.xPixelsWithinBlack(curr.getRight(), this.getStartWidth() / 2)) {
         pq.add(curr.getRight());
         visited.add(curr.getRight());
         curr.getRight().setPrev(curr);
@@ -158,6 +158,88 @@ public class Maze {
     }
 
     this.getSolvedMaze();
+  }
+
+  private int getStartWidth() {
+    int res = 0;
+   for (int col = 0; col < this.mazeImg.getWidth(); col++) {
+     if (this.mazeImg.getRGB(col, 0) == Color.white.getRGB()) {
+       res +=1;
+     }
+   }
+   return res;
+  }
+
+  private boolean xPixelsWithinBlack(MazeSquare curr, int x) {
+    int startRow = curr.getRow();
+    int startCol = curr.getCol();
+    int currRow = curr.getRow();
+    int currCol = curr.getCol();
+    while(currCol > startCol - x && currCol > 0) {
+      if (this.mazeImg.getRGB(currCol, startRow) == Color.black.getRGB()) {
+        return true;
+      }
+      currCol -= 1;
+    }
+    currCol = startCol;
+    while (currCol < startCol + x && currCol < this.mazeImg.getWidth()) {
+      if (this.mazeImg.getRGB(currCol, startRow) == Color.black.getRGB()) {
+        return true;
+      }
+      currCol += 1;
+    }
+    currCol = startCol;
+    while (currRow > startRow - x && currRow > 0) {
+      if (this.mazeImg.getRGB(startCol, currRow) == Color.black.getRGB()) {
+        return true;
+      }
+      currRow -=1;
+    }
+    currRow = startRow;
+    while (currRow < startRow + x && currRow < this.mazeImg.getHeight()) {
+      if (this.mazeImg.getRGB(startCol, currRow) == Color.black.getRGB()) {
+        return true;
+      }
+      currRow +=1;
+    }
+    currRow = startRow;
+    while (currRow > startRow - x && currCol > startCol - x && currRow > 0 && currCol > 0) {
+      if (this.mazeImg.getRGB(currCol, currRow) == Color.black.getRGB()) {
+        return true;
+      }
+      currRow -=1;
+      currCol -=1;
+    }
+    currRow = startRow;
+    currCol = startCol;
+    while (currRow < startRow + x && currCol < startCol + x && currRow < this.mazeImg.getHeight() && currCol < this.mazeImg.getWidth()) {
+      if (this.mazeImg.getRGB(currCol, currRow) == Color.black.getRGB()) {
+        return true;
+      }
+      currRow += 1;
+      currCol += 1;
+    }
+    currRow = startRow;
+    currCol = startCol;
+    while (currRow < startRow + x && currCol > startCol - x && currCol > 0 && currRow < this.mazeImg.getHeight()) {
+      if (this.mazeImg.getRGB(currCol, currRow) == Color.black.getRGB()) {
+        return true;
+      }
+      currRow += 1;
+      currCol -= 1;
+    }
+    currRow = startRow;
+    currCol = startCol;
+    while (currCol < startCol + x && currRow > startRow - x && currRow > 0 && currCol < this.mazeImg.getWidth()) {
+      if (this.mazeImg.getRGB(currCol, currRow) == Color.black.getRGB()) {
+        return true;
+      }
+      currCol += 1;
+      currRow -= 1;
+    }
+    currRow = startRow;
+    currCol = startCol;
+    return false;
   }
 
   /**
@@ -182,7 +264,7 @@ public class Maze {
   private MazeSquare findStartSquare() {
     for (int col = 0; col < this.maze[0].length; col++) {
       if (this.maze[0][col].isWhite()) {
-        return this.maze[0][col];
+        return this.maze[0][col + this.getStartWidth() / 2];
       }
     }
     return null;

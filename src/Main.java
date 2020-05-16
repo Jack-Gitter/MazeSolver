@@ -16,7 +16,8 @@ public class Main {
           + "the bottom and top rows are all black pixels besides the starting and ending zones");
       m = new Maze(s.next());
     } catch(IOException ioe) {
-      ioe.printStackTrace();
+      System.out.println("invalid input");
+      return;
     }
 
     while (!algo.equals("PVDTE") && !algo.equals("FF")) {

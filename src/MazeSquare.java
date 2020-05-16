@@ -176,4 +176,5 @@ public class MazeSquare {
   public int getDistToEnd() {
     return this.distToEnd;
   }
+
 }

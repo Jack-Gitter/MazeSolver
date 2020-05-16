@@ -3,10 +3,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 /*
-Issues:
-  getting red line in the middle --> do a computation between the closest black line and the
-  corrisponding row / col of the previous square(depnding if the black line is to the left/right or up/down),
-   go in the middle of the two, then place the pixel there
+  Runs the solver
  */
 
 public class Main {
@@ -15,22 +12,25 @@ public class Main {
     Scanner s = new Scanner(System.in);
     String algo = "";
     try {
-      System.out.println("please enter a file path for your maze");
+      System.out.println("please enter a file path for your maze: Ensure that it is a png and that "
+          + "the bottom and top rows are all black pixels besides the starting and ending zones");
       m = new Maze(s.next());
     } catch(IOException ioe) {
       ioe.printStackTrace();
     }
 
-    while (!algo.equals("PDTE") && !algo.equals("FF")) {
-      System.out.println("Which algorithm would you like to use? options are : PDTE or FF");
+    while (!algo.equals("PVDTE") && !algo.equals("FF")) {
+      System.out.println("Which algorithm would you like to use? options are : "
+          + "PVDTE (Prioritize Vertical Distance To End) or FF (Flood Fill)");
       algo = s.next();
     }
-    if (algo.equals("PDTE")) {
+    System.out.println("Solving...");
+    if (algo.equals("PVDTE")) {
       m.solveMazePriorityQueue();
     } else {
       m.solveMazeFloodFill();
     }
-    System.out.println("Solving...");
+
 
   }
 }

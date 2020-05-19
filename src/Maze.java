@@ -25,6 +25,7 @@ public class Maze {
 
   private MazeSquare[][] maze;
   private BufferedImage mazeImg;
+  private boolean solutionFound;
 
   /**
    * Instantiates a maze.
@@ -35,6 +36,7 @@ public class Maze {
   public Maze(String filePath) throws IOException {
     File f = new File(filePath);
     this.mazeImg = ImageIO.read(f);
+    this.solutionFound = false;
     this.maze = new MazeSquare[mazeImg.getHeight()][mazeImg.getWidth()];
     this.initMaze();
   }
@@ -92,6 +94,7 @@ public class Maze {
       visited.add(curr);
       if (curr.getRow() == this.mazeImg.getHeight() - 1 && curr.getColor().equals(Color.WHITE)) {
         this.setAllPrevToRed(curr);
+        this.solutionFound = true;
         break;
       }
       if (curr.getUp() != null && !visited.contains(curr.getUp()) && curr.getColor().equals(Color.WHITE) && !this.xPixelsWithinBlack(curr.getUp(), this.getStartWidth() / 2)) {
@@ -115,8 +118,7 @@ public class Maze {
         curr.getRight().setPrev(curr);
       }
     }
-
-    this.getSolvedMaze();
+      this.getSolvedMaze();
   }
 
   public void solveMazePriorityQueue() {
@@ -133,6 +135,7 @@ public class Maze {
       visited.add(curr);
       if (curr.getRow() == this.mazeImg.getHeight() - 1 && curr.getColor().equals(Color.WHITE)) {
         this.setAllPrevToRed(curr);
+        this.solutionFound = true;
         break;
       }
       if (curr.getUp() != null && !visited.contains(curr.getUp()) && curr.getColor().equals(Color.WHITE) && !this.xPixelsWithinBlack(curr.getUp(), this.getStartWidth() / 2)) {
@@ -156,8 +159,7 @@ public class Maze {
         curr.getRight().setPrev(curr);
       }
     }
-
-    this.getSolvedMaze();
+      this.getSolvedMaze();
   }
 
   private int getStartWidth() {
@@ -275,11 +277,16 @@ public class Maze {
    */
 
   private void getSolvedMaze() {
-    JFrame frame = new JFrame();
-    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-    frame.setSize(this.mazeImg.getWidth() + 50, this.mazeImg.getHeight() + 50);
-    frame.add(new JLabel(new ImageIcon(this.mazeImg)));
-    frame.setVisible(true);
+    if (!this.solutionFound) {
+      System.out.println("no solution found");
+      return;
+    } else {
+      JFrame frame = new JFrame();
+      frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+      frame.setSize(this.mazeImg.getWidth() + 50, this.mazeImg.getHeight() + 50);
+      frame.add(new JLabel(new ImageIcon(this.mazeImg)));
+      frame.setVisible(true);
+    }
   }
 
 }

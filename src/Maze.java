@@ -26,6 +26,7 @@ public class Maze {
   private MazeSquare[][] maze;
   private BufferedImage mazeImg;
   private boolean solutionFound;
+  String filePath;
 
   /**
    * Instantiates a maze.
@@ -34,7 +35,8 @@ public class Maze {
    */
 
   public Maze(String filePath) throws IOException {
-    File f = new File(filePath);
+    this.filePath = filePath;
+    File f = new File(this.filePath);
     this.mazeImg = ImageIO.read(f);
     this.solutionFound = false;
     this.maze = new MazeSquare[mazeImg.getHeight()][mazeImg.getWidth()];
@@ -278,14 +280,16 @@ public class Maze {
 
   private void getSolvedMaze() {
     if (!this.solutionFound) {
-      System.out.println("no solution found");
+      System.out.println("invalid maze entry (unsolvable or does not meet parameters required)");
       return;
     } else {
-      JFrame frame = new JFrame();
-      frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-      frame.setSize(this.mazeImg.getWidth() + 50, this.mazeImg.getHeight() + 50);
-      frame.add(new JLabel(new ImageIcon(this.mazeImg)));
-      frame.setVisible(true);
+      String newName = this.filePath.substring(0, this.filePath.indexOf("."));
+      File f = new File(newName + "solved.png");
+      try {
+        ImageIO.write(this.mazeImg, "png", f);
+      } catch (IOException e) {
+        System.out.println("invalid file path to write to");
+      }
     }
   }
 

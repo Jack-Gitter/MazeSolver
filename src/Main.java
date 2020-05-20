@@ -31,6 +31,7 @@ public class Main {
     } else {
       m.solveMazeFloodFill();
     }
+    System.out.println("solved! please check the directory where your original image was");
 
 
   }

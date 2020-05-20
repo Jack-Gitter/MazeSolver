@@ -26,7 +26,7 @@ public class Maze {
   private MazeSquare[][] maze;
   private BufferedImage mazeImg;
   private boolean solutionFound;
-  String filePath;
+  private String filePath;
 
   /**
    * Instantiates a maze.

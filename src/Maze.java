@@ -48,18 +48,18 @@ public class Maze {
     MazeSquare startSquare = this.findStartSquare();
     Set<MazeSquare> visited = new HashSet<>();
     if (startSquare == null) {
-      throw new IllegalArgumentException("You have given an invalid maze");
+      return;
     }
     dq.offerLast(startSquare);
     while (dq.size() != 0) {
       MazeSquare curr = dq.pollFirst();
+      this.mazeImg.setRGB(curr.getCol(), curr.getRow(), new Color(3, 252, 211).getRGB());
       visited.add(curr);
       if (this.checkForSolution(curr)) {
         this.setAllPrevToRed(curr);
         this.solutionFound = true;
         break;
       }
-      this.isInvalidPixel = false;
       if (this.squareIsValid(curr.getUp(), visited)) {
         dq.offerLast(curr.getUp());
         visited.add(curr.getUp());
@@ -69,13 +69,13 @@ public class Maze {
       if (this.squareIsValid(curr.getDown(), visited)) {
         dq.offerLast(curr.getDown());
         visited.add(curr.getDown());
-        this.setPrev(curr.getDown(), curr);;
+        this.setPrev(curr.getDown(), curr);
       }
       this.isInvalidPixel = false;
       if (this.squareIsValid(curr.getLeft(), visited)) {
         dq.offerLast(curr.getLeft());
         visited.add(curr.getLeft());
-        this.setPrev(curr.getLeft(), curr);;
+        this.setPrev(curr.getLeft(), curr);
       }
       this.isInvalidPixel = false;
       if (this.squareIsValid(curr.getRight(), visited)) {
@@ -83,6 +83,7 @@ public class Maze {
         visited.add(curr.getRight());
         this.setPrev(curr.getRight(), curr);
       }
+      this.isInvalidPixel = false;
     }
   }
 
@@ -247,7 +248,7 @@ public class Maze {
   private MazeSquare findStartSquare() {
     for (int col = 0; col < this.maze[0].length; col++) {
       if (this.maze[0][col].isWhite()) {
-        return this.maze[2][col + this.getStartWidth() / 2 - 1];
+        return this.maze[0][col + this.getStartWidth() / 2 - 1];
       }
     }
     return null;
@@ -272,8 +273,8 @@ public class Maze {
    */
 
   private boolean squareIsValid(MazeSquare square, Set<MazeSquare> visited) {
-    return square != null && !visited.contains(square) && square.getColor().equals(Color.white)
-        && !this.xPixelsWithinBlack(square, this.getStartWidth() / 2);
+    return square != null && !visited.contains(square) && !square.getColor().equals(Color.black)
+        && !this.xPixelsWithinBlack(square, this.getStartWidth() / 2 + 1);
   }
 
   /**
@@ -335,7 +336,7 @@ public class Maze {
   /**
    * Initializes only the colors of the {@code MazeSquare} objects in the maze.
    */
-  
+
   private void setColors() {
     for (int i = 0; i < this.mazeImg.getHeight(); i++) {
       for (int j = 0; j < this.mazeImg.getWidth(); j++) {

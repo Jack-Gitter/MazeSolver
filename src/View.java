@@ -1,6 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -10,14 +11,15 @@ import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-// things left to do :
-// why is it taking so long to solve the maze in comparison to my other one with no gui?
-// why is there a discrepancy in time between this program and the other maze solver with no gui?
+// things left to do: make the screen dynamic.
+// add a algorithm picker, so the user can choose which algorithm they want
+// to see implemented
 
 /**
  * Handles graphics for the program.
@@ -32,6 +34,7 @@ public class View {
   private JButton solveMaze;
   private Box box1;
   private Box box2;
+  private Box box3;
   private BufferedImage unsolvedMaze;
   private BufferedImage solvedMaze;
   private JLabel lLabel;
@@ -40,6 +43,7 @@ public class View {
   private Image scaledUnsolvedMaze;
   private Image scaledSolvedMaze;
   private String pathToUnsolvedMaze;
+  private final JComboBox<String> algos;
 
   public View() {
 
@@ -49,16 +53,16 @@ public class View {
     this.frame = new JFrame("Maze Solver");
     this.frame.setSize(800, 500);
     this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    this.frame.setResizable(false);
+    this.frame.setResizable(true);
 
     // initialize panel
     this.panel = new JPanel();
 
-    // what should the initial inputs for the images be?
+    // initialize images
     this.unsolvedMaze = null;
     this.solvedMaze = null;
 
-    // scale images to fit in jframe
+    // scale images to fit in jFrame
     this.scaledUnsolvedMaze  = null;
     this.scaledSolvedMaze = null;
     // initialize buttons
@@ -69,6 +73,9 @@ public class View {
     // initialize labels for images
     this.lLabel = new JLabel();
     this.rLabel = new JLabel();
+
+    // initialize JComboBox
+    this.algos = new JComboBox<String>(new String[]{"A* Modification", "BFS"});
 
     // parameters for right button
     this.downloadImage.addActionListener(new RightButtonController(this));
@@ -81,9 +88,10 @@ public class View {
     // initialize box layouts
     this.box2 = Box.createHorizontalBox();
     this.box1 = Box.createHorizontalBox();
+    this.box3 = Box.createHorizontalBox();
 
     // set box1 parameters
-    this.box1.add(Box.createRigidArea(new Dimension(0, 20)));
+    this.box1.add(Box.createRigidArea(new Dimension(0, 5)));
     this.box1.add(Box.createHorizontalStrut(125));
     this.box1.add(this.findImage);
     this.box1.add(Box.createHorizontalStrut(105));
@@ -98,6 +106,11 @@ public class View {
     this.box2.add(Box.createHorizontalStrut(80));
     this.box2.add(rLabel);
     this.frame.add(this.box2, BorderLayout.WEST);
+
+    // set box3 parameters
+    this.box3.add(Box.createRigidArea(new Dimension(0, 15)));
+    this.box3.add(this.algos);
+    this.frame.add(this.box3, BorderLayout.NORTH);
 
     // set action listener for the find maze button
     this.findImage.addActionListener(new leftButtonController(this));
@@ -172,6 +185,10 @@ public class View {
 
   public void setPathToUnsolvedMaze(String s) {
     this.pathToUnsolvedMaze = s;
+  }
+
+  public JComboBox getAlgos() {
+    return this.algos;
   }
 
 

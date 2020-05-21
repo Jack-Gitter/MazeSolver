@@ -16,7 +16,11 @@ public class MiddleButtonController implements ActionListener {
   public void actionPerformed(ActionEvent e) {
     try {
       Maze m = new Maze(v.getPathToUnsolvedMaze());
-      m.solveMazePriorityQueue();
+      if (this.v.getAlgos().getSelectedItem().toString().equals("A* Modification")) {
+        m.solveMazePriorityQueue();
+      } else if (this.v.getAlgos().getSelectedItem().toString().equals("BFS")){
+        m.solveMazeFloodFill();
+      }
       this.v.setSolvedMaze(m.retrieveSolvedMazeImg());
       this.v.setScaledSolvedMaze(v.getSolvedMaze().getScaledInstance(
           (int) (this.v.getFrame().getWidth() / 2.5), (int) (this.v.getFrame().getHeight() / 1.5),

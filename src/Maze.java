@@ -21,6 +21,7 @@ public class Maze {
   private BufferedImage mazeImg;
   private boolean solutionFound;
   private String filePath;
+  private boolean isInvalidPixel;
 
   /**
    * Instantiates a maze.
@@ -29,6 +30,7 @@ public class Maze {
    */
 
   public Maze(String filePath) throws IOException {
+    this.isInvalidPixel = false;
     this.filePath = filePath;
     File f = new File(this.filePath);
     this.mazeImg = ImageIO.read(f);
@@ -38,68 +40,12 @@ public class Maze {
   }
 
   /**
-   * Initializes the maze to be processed.
-   */
-
-  private void initMaze() {
-    for (int i = 0; i < this.mazeImg.getHeight(); i++) {
-      for (int j = 0; j < this.mazeImg.getWidth(); j++) {
-        maze[i][j] = new MazeSquare(null, null, null, null, null, null, null, null, i, j, i - mazeImg.getHeight(), new Color(mazeImg.getRGB(j,i)));
-      }
-    }
-    for (int i = 0; i < this.mazeImg.getHeight(); i++) {
-      for (int j = 0; j < this.mazeImg.getWidth(); j++) {
-        if (i > 0) {
-          this.maze[i][j].setUp(maze[i-1][j]);
-        } else {
-          this.maze[i][j].setUp(null);
-        }
-        if (i < this.mazeImg.getHeight() - 1) {
-          this.maze[i][j].setDown(maze[i+1][j]);
-        } else {
-          this.maze[i][j].setDown(null);
-        }
-        if (j > 0) {
-          this.maze[i][j].setLeft(maze[i][j-1]);
-        } else {
-          this.maze[i][j].setLeft(null);
-        }
-        if (j < this.mazeImg.getWidth() - 1) {
-          this.maze[i][j].setRight(maze[i][j+1]);
-        } else {
-          this.maze[i][j].setRight(null);
-        }
-        if (i > 0 && j < this.mazeImg.getWidth() - 1) {
-          this.maze[i][j].setUpRight(maze[i-1][j+1]);
-        } else {
-          this.maze[i][j].setUpRight(null);
-        }
-        if (i > 0 && j > 0) {
-          this.maze[i][j].setUpLeft(maze[i-1][j-1]);
-        } else {
-          this.maze[i][j].setUpLeft(null);
-        }
-        if (i < this.mazeImg.getHeight() - 1 && j > 0) {
-          this.maze[i][j].setDownLeft(maze[i+1][j-1]);
-        } else {
-          this.maze[i][j].setDownLeft(null);
-        }
-       if (i < this.mazeImg.getHeight() - 1 && j < this.mazeImg.getWidth() - 1) {
-         this.maze[i][j].setDownRight(maze[i+1][j+1]);
-       } else {
-         this.maze[i][j].setDownRight(null);
-       }
-      }
-    }
-  }
-
-  /**
    * solves the maze.
    */
 
   public void solveMazeFloodFill() {
-    MazeSquare startSquare = this.findStartSquare();
     Deque<MazeSquare> dq = new LinkedList<MazeSquare>();
+    MazeSquare startSquare = this.findStartSquare();
     Set<MazeSquare> visited = new HashSet<>();
     if (startSquare == null) {
       throw new IllegalArgumentException("You have given an invalid maze");
@@ -108,90 +54,101 @@ public class Maze {
     while (dq.size() != 0) {
       MazeSquare curr = dq.pollFirst();
       visited.add(curr);
-      if (curr.getRow() == this.mazeImg.getHeight() - 1 && curr.getColor().equals(Color.WHITE)) {
+      if (this.checkForSolution(curr)) {
         this.setAllPrevToRed(curr);
         this.solutionFound = true;
         break;
       }
-      if (curr.getUp() != null && !visited.contains(curr.getUp())
-          && curr.getColor().equals(Color.WHITE)
-          && !this.xPixelsWithinBlack(curr.getUp(), (int) (this.getStartWidth() / 2))) {
+      this.isInvalidPixel = false;
+      if (this.squareIsValid(curr.getUp(), visited)) {
         dq.offerLast(curr.getUp());
         visited.add(curr.getUp());
-        curr.getUp().setPrev(curr);
+        this.setPrev(curr.getUp(), curr);
       }
-      if (curr.getDown() != null && !visited.contains(curr.getDown())
-          && curr.getColor().equals(Color.WHITE)
-          && !this.xPixelsWithinBlack(curr.getDown(), (int) (this.getStartWidth() / 2))) {
+      this.isInvalidPixel = false;
+      if (this.squareIsValid(curr.getDown(), visited)) {
         dq.offerLast(curr.getDown());
         visited.add(curr.getDown());
-        curr.getDown().setPrev(curr);
+        this.setPrev(curr.getDown(), curr);;
       }
-      if (curr.getLeft() != null && !visited.contains(curr.getLeft())
-          && curr.getColor().equals(Color.WHITE)
-          && !this.xPixelsWithinBlack(curr.getLeft(), (int) (this.getStartWidth() / 2))) {
+      this.isInvalidPixel = false;
+      if (this.squareIsValid(curr.getLeft(), visited)) {
         dq.offerLast(curr.getLeft());
         visited.add(curr.getLeft());
-        curr.getLeft().setPrev(curr);
+        this.setPrev(curr.getLeft(), curr);;
       }
-      if (curr.getRight() != null && !visited.contains(curr.getRight())
-          && curr.getColor().equals(Color.WHITE)
-          && !this.xPixelsWithinBlack(curr.getRight(), (int) (this.getStartWidth() / 2))) {
+      this.isInvalidPixel = false;
+      if (this.squareIsValid(curr.getRight(), visited)) {
         dq.offerLast(curr.getRight());
         visited.add(curr.getRight());
-        curr.getRight().setPrev(curr);
+        this.setPrev(curr.getRight(), curr);
       }
     }
   }
 
+  /**
+   * Solves the maze.
+   */
+
   public void solveMazePriorityQueue() {
-    MazeSquare startSquare = this.findStartSquare();
     Comparator<MazeSquare> c = (m1, m2) -> m2.getDistToEnd() - m1.getDistToEnd();
     PriorityQueue<MazeSquare> pq = new PriorityQueue<>(c);
+    MazeSquare startSquare = this.findStartSquare();
     Set<MazeSquare> visited = new HashSet<>();
     if (startSquare == null) {
-      throw new IllegalArgumentException("You have given an invalid maze");
+      return;
     }
     pq.add(startSquare);
     while (pq.size() != 0) {
       MazeSquare curr = pq.poll();
       this.mazeImg.setRGB(curr.getCol(), curr.getRow(), new Color(3, 252, 211).getRGB());
       visited.add(curr);
-      if (curr.getRow() == this.mazeImg.getHeight() - 1 && curr.getColor().equals(Color.WHITE)) {
+      if (this.checkForSolution(curr)) {
         this.setAllPrevToRed(curr);
         this.solutionFound = true;
         break;
       }
-      if (curr.getUp() != null && !visited.contains(curr.getUp())
-          && curr.getColor().equals(Color.WHITE)
-          && !this.xPixelsWithinBlack(curr.getUp(), (int) (this.getStartWidth() / 2))) {
+      if (this.squareIsValid(curr.getUp(), visited)) {
         pq.add(curr.getUp());
         visited.add(curr.getUp());
-        curr.getUp().setPrev(curr);
+        this.setPrev(curr.getUp(), curr);
       }
-      if (curr.getDown() != null && !visited.contains(curr.getDown())
-          && curr.getColor().equals(Color.WHITE)
-          && !this.xPixelsWithinBlack(curr.getDown(), (int) (this.getStartWidth() / 2))) {
+      this.isInvalidPixel = false;
+      if (this.squareIsValid(curr.getDown(), visited)) {
         pq.add(curr.getDown());
         visited.add(curr.getDown());
-        curr.getDown().setPrev(curr);
+        this.setPrev(curr.getDown(), curr);
       }
-      if (curr.getLeft() != null && !visited.contains(curr.getLeft())
-          && curr.getColor().equals(Color.WHITE)
-          && !this.xPixelsWithinBlack(curr.getLeft(), (int) (this.getStartWidth() / 2))) {
+      this.isInvalidPixel = false;
+      if (this.squareIsValid(curr.getLeft(), visited)) {
         pq.add(curr.getLeft());
         visited.add(curr.getLeft());
-        curr.getLeft().setPrev(curr);
+        this.setPrev(curr.getLeft(), curr);
       }
-      if (curr.getRight() != null && !visited.contains(curr.getRight())
-          && curr.getColor().equals(Color.WHITE)
-          && !this.xPixelsWithinBlack(curr.getRight(), (int) (this.getStartWidth() / 2))) {
+      this.isInvalidPixel = false;
+      if (this.squareIsValid(curr.getRight(), visited)) {
         pq.add(curr.getRight());
         visited.add(curr.getRight());
-        curr.getRight().setPrev(curr);
+        this.setPrev(curr.getRight(), curr);
       }
+      this.isInvalidPixel = false;
     }
   }
+
+  /**
+   * Sets the previous element of a {@code MazeSquare}.
+   * @param next the element to have the previous field set.
+   * @param current the element to occupy the previous field.
+   */
+
+  private void setPrev(MazeSquare next, MazeSquare current) {
+    next.setPrev(current);
+  }
+
+  /**
+   * Gets the width of the entrance of the maze.
+   * @return the width of the entrace.
+   */
 
   private int getStartWidth() {
     int res = 0;
@@ -203,6 +160,24 @@ public class Maze {
     return res;
   }
 
+  /**
+   * Determines if a square is in bounds and not processed by the algorithm yet.
+   * @param square the square to check.
+   * @param visited the {@code Set<MazeSquare>} of all visited {@code MazeSquares}
+   * @return true if the square is in bounds and not processed, false otherwise.
+   */
+
+  private boolean squareIsInBoundsAndNotProcessed(MazeSquare square, Set<MazeSquare> visited) {
+    return square != null && !visited.contains(square);
+  }
+
+  /**
+   * Determines how close a square is to the walls of the maze.
+   * @param curr the current square to process.
+   * @param x the distance parameter.
+   * @return true if the square is within x pixels to the walls of the maze.
+   */
+
   private boolean xPixelsWithinBlack(MazeSquare curr, int x) {
     Deque<MazeSquare> dq = new LinkedList<>();
     Set<MazeSquare> visited = new HashSet<>();
@@ -211,81 +186,43 @@ public class Maze {
     }
     dq.offerLast(curr);
     for (int i = 0; i < x-1; i++) {
-      int currentlen = dq.size();
-      for(int j = 0; j < currentlen; j++) {
+      int currentLen = dq.size();
+      for(int j = 0; j < currentLen; j++) {
         MazeSquare current = dq.pollFirst();
         if (current.getColor().equals(Color.black)) {
           return true;
         }
         visited.add(current);
-        if (current.getUp() != null && !visited.contains(current.getUp())) {
-          if (current.getUp().getColor().equals(Color.BLACK)) {
-            return true;
-          } else {
-            dq.offerLast(current.getUp());
-            visited.add(current.getUp());
-          }
-        }
-        if (current.getLeft() != null && !visited.contains(current.getLeft())) {
-          if (current.getLeft().getColor().equals(Color.BLACK)) {
-            return true;
-          } else {
-            dq.offerLast(current.getLeft());
-            visited.add(current.getLeft());
-          }
-        }
-        if (current.getRight() != null && !visited.contains(current.getRight())) {
-          if (current.getRight().getColor().equals(Color.BLACK)) {
-            return true;
-          } else {
-            dq.offerLast(current.getRight());
-            visited.add(current.getRight());
-          }
-        }
-        if (current.getDown() != null && !visited.contains(current.getDown())) {
-          if (current.getDown().getColor().equals(Color.BLACK)) {
-            return true;
-          } else {
-            dq.offerLast(current.getDown());
-            visited.add(current.getDown());
-          }
-        }
-        if (current.getUpRight() != null && !visited.contains(current.getUpRight())) {
-          if (current.getUpRight().getColor().equals(Color.black)) {
-            return true;
-          }
-          else {
-            dq.offerLast(current.getUpRight());
-            visited.add(current.getUpRight());
-          }
-        }
-        if (current.getUpLeft() != null && !visited.contains(current.getUpLeft())) {
-          if (current.getUpLeft().getColor().equals(Color.black)) {
-            return true;
-          } else {
-            dq.offerLast(current.getUpLeft());
-            visited.add(current.getUpLeft());
-          }
-        }
-        if (current.getDownLeft() != null && !visited.contains(current.getDownLeft())) {
-          if (current.getDownLeft().getColor().equals(Color.black)) {
-            return true;
-          } else {
-            dq.offerLast(current.getDownLeft());
-            visited.add(current.getDownLeft());
-          }
-        }
-        if (current.getDownRight() != null && !visited.contains(current.getDownRight())) {
-          if (current.getDownRight().getColor().equals(Color.black)) {
-            return true;
-          } else {
-            dq.offerLast(current.getDownRight());
-            visited.add(current.getDownRight());
-          }
-        }
+        this.continuePixelCheck(dq, current.getUp(), visited);
+        this.continuePixelCheck(dq, current.getRight(), visited);
+        this.continuePixelCheck(dq, current.getLeft(), visited);
+        this.continuePixelCheck(dq, current.getDown(), visited);
+        this.continuePixelCheck(dq, current.getUpRight(), visited);
+        this.continuePixelCheck(dq, current.getUpLeft(), visited);
+        this.continuePixelCheck(dq, current.getDownRight(), visited);
+        this.continuePixelCheck(dq, current.getDownLeft(), visited);
+        if (this.isInvalidPixel) return true;
       }
     }
       return false;
+  }
+
+  /**
+   * Determines if a square is black or not. Assists the {@code xPixelsWithinBlack} function.
+   * @param dq the list of squares to process.
+   * @param square the current square to process.
+   * @param visited the {@code Set<MazeSquare>} of {@code MazeSquare} objects previously processed.
+   */
+
+  private void continuePixelCheck(Deque<MazeSquare> dq, MazeSquare square, Set<MazeSquare> visited) {
+    if (this.squareIsInBoundsAndNotProcessed(square, visited)) {
+      if (square.getColor().equals(Color.black)) {
+        this.isInvalidPixel = true;
+      } else {
+        dq.offerLast(square);
+        visited.add(square);
+      }
+    }
   }
 
   /**
@@ -321,7 +258,92 @@ public class Maze {
    */
 
   public BufferedImage retrieveSolvedMazeImg() {
-    return this.mazeImg;
+    if (!solutionFound) {
+      throw new IllegalArgumentException("maze image was not valid");
+    }
+      return this.mazeImg;
+  }
+
+  /**
+   * Determines if a square is valid to continue moving through the maze.
+   * @param square the square to check.
+   * @param visited the {@code Set<MazeSquare>} of {@code MazeSquare} objects previously processed.
+   * @return true if the square is valid, false otherwise.
+   */
+
+  private boolean squareIsValid(MazeSquare square, Set<MazeSquare> visited) {
+    return square != null && !visited.contains(square) && square.getColor().equals(Color.white)
+        && !this.xPixelsWithinBlack(square, this.getStartWidth() / 2);
+  }
+
+  /**
+   * Determines if the current square is at the end of the maze.
+   * @param curr the current square to process.
+   * @return true if the maze has been solved, false otherwise.
+   */
+
+  private boolean checkForSolution(MazeSquare curr) {
+    return (curr.getRow() == this.mazeImg.getHeight() - 1 && curr.getColor().equals(Color.WHITE));
+  }
+
+  /**
+   * Initializes the maze to be processed.
+   */
+
+  private void initMaze() {
+
+    this.setColors();
+
+    this.setNeighbors();
+  }
+
+  /**
+   * Sets all of the fields other than color in each {@code MazeSquare} object in the maze.
+   */
+
+  private void setNeighbors() {
+    for (int i = 0; i < this.mazeImg.getHeight(); i++) {
+      for (int j = 0; j < this.mazeImg.getWidth(); j++) {
+        if (i > 0) {
+          this.maze[i][j].setUp(maze[i-1][j]);
+        }
+        if (i < this.mazeImg.getHeight() - 1) {
+          this.maze[i][j].setDown(maze[i+1][j]);
+        }
+        if (j > 0) {
+          this.maze[i][j].setLeft(maze[i][j-1]);
+        }
+        if (j < this.mazeImg.getWidth() - 1) {
+          this.maze[i][j].setRight(maze[i][j+1]);
+        }
+        if (i > 0 && j < this.mazeImg.getWidth() - 1) {
+          this.maze[i][j].setUpRight(maze[i-1][j+1]);
+        }
+        if (i > 0 && j > 0) {
+          this.maze[i][j].setUpLeft(maze[i-1][j-1]);
+        }
+        if (i < this.mazeImg.getHeight() - 1 && j > 0) {
+          this.maze[i][j].setDownLeft(maze[i+1][j-1]);
+        }
+        if (i < this.mazeImg.getHeight() - 1 && j < this.mazeImg.getWidth() - 1) {
+          this.maze[i][j].setDownRight(maze[i+1][j+1]);
+        }
+      }
+    }
+  }
+
+  /**
+   * Initializes only the colors of the {@code MazeSquare} objects in the maze.
+   */
+  
+  private void setColors() {
+    for (int i = 0; i < this.mazeImg.getHeight(); i++) {
+      for (int j = 0; j < this.mazeImg.getWidth(); j++) {
+        maze[i][j] = new MazeSquare(null, null, null, null, null,
+            null, null, null, i, j,
+            i - mazeImg.getHeight(), new Color(mazeImg.getRGB(j,i)));
+      }
+    }
   }
 
 }

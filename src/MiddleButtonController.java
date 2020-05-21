@@ -25,7 +25,9 @@ public class MiddleButtonController implements ActionListener {
       this.v.revalidateFrame();
       this.v.repaint();
     } catch (IOException ioException) {
-      ioException.printStackTrace();
+      return;
+    } catch (IllegalArgumentException iaException) {
+      return;
     }
   }
 }

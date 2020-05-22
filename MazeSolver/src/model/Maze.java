@@ -383,6 +383,7 @@ public class Maze implements MazeModel {
         maze[i][j] = new MazeSquare(null, null, null, null, null,
             null, null, null, i, j,
             (Math.abs(mazeImg.getHeight() - i)), (Math.abs(endCord - j)), new Color(mazeImg.getRGB(j,i)));
+
       }
     }
   }

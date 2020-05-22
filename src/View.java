@@ -53,7 +53,7 @@ public class View {
     this.frame = new JFrame("Maze Solver");
     this.frame.setSize(800, 500);
     this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    this.frame.setResizable(true);
+    this.frame.setResizable(false);
 
     // initialize panel
     this.panel = new JPanel();
@@ -123,69 +123,150 @@ public class View {
 
   }
 
+  /**
+   * returns the file chooser.
+   * @return the file chooser.
+   */
+
   public JFileChooser getJfc() {
     return this.jfc;
   }
+
+  /**
+   * returns the find image button.
+   * @return the find image button.
+   */
 
   public JButton getFindImage() {
     return this.findImage;
   }
 
+  /**
+   * returns the left label which holds the unsolved maze.
+   * @return the left label.
+   */
+
   public JLabel getlLabel() {
     return this.lLabel;
   }
+
+  /**
+   * returns the frame.
+   * @return the frame.
+   */
 
   public JFrame getFrame() {
     return this.frame;
   }
 
+  /**
+   * gets the image of the unsolved maze.
+   * @return the image of the unsolved maze.
+   */
+
   public Image getUnsolvedMaze() {
     return this.unsolvedMaze;
   }
+
+  /**
+   * sets the image for the unsolved maze.
+   * @param i the image to set the unsolved maze to.
+   */
 
   public void setUnsolvedMaze(BufferedImage i) {
     this.unsolvedMaze = i;
   }
 
+  /**
+   * scale the maze so it can fit on the screen.
+   * @param i the scaled maze.
+   */
+
   public void setScaledUnsolvedMaze(Image i) {
     this.scaledUnsolvedMaze = i;
   }
+
+  /**
+   * sets the unsolved maze image.
+   * @param i new image of unsolved maze.
+   */
 
   public void setSolvedMaze(BufferedImage i) {
     this.solvedMaze = i;
   }
 
+  /**
+   * gets the solved maze image.
+   * @return the solved maze image.
+   */
   public Image getSolvedMaze() {
     return this.solvedMaze;
   }
+
+  /**
+   * sets the scaled solved maze image.
+   * @param i the new scaled solved maze image.
+   */
 
   public void setScaledSolvedMaze(Image i) {
     this.scaledUnsolvedMaze = i;
   }
 
+  /**
+   * gets the scaled unsolved maze image.
+   * @return the scaled unsolved maze image.
+   */
+
   public Image getScaledUnsolvedMaze() {
     return this.scaledUnsolvedMaze;
   }
+
+  /**
+   * revalidates the frame.
+   */
 
   public void revalidateFrame() {
     this.frame.revalidate();
   }
 
+  /**
+   * repaints the frame.
+   */
+
   public void repaint() {
     this.frame.repaint();
   }
+
+  /**
+   * gets the path to the unsolved maze image file.
+   * @return the path to the unsolved maze image file.
+   */
 
   public String getPathToUnsolvedMaze() {
     return this.pathToUnsolvedMaze;
   }
 
-  public JLabel getrLabel() {
+  /**
+   * gets the right label that has the solved image.
+   * @return the right label.
+   */
+
+  public JLabel getRLabel() {
     return this.rLabel;
   }
 
+  /**
+   * sets the file path to the unsolved maze image.
+   * @param s the file path to the unsolved maze image.
+   */
   public void setPathToUnsolvedMaze(String s) {
     this.pathToUnsolvedMaze = s;
   }
+
+  /**
+   * gets the algorithms supported by the program.
+   * @return the list of algorithms in a box.
+   */
 
   public JComboBox getAlgos() {
     return this.algos;

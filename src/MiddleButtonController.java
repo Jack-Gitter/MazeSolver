@@ -25,7 +25,7 @@ public class MiddleButtonController implements ActionListener {
       this.v.setScaledSolvedMaze(v.getSolvedMaze().getScaledInstance(
           (int) (this.v.getFrame().getWidth() / 2.5), (int) (this.v.getFrame().getHeight() / 1.5),
           Image.SCALE_SMOOTH));
-      this.v.getrLabel().setIcon(new ImageIcon(this.v.getScaledUnsolvedMaze()));
+      this.v.getRLabel().setIcon(new ImageIcon(this.v.getScaledUnsolvedMaze()));
       this.v.revalidateFrame();
       this.v.repaint();
     } catch (IOException ioException) {

@@ -1,4 +1,6 @@
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +22,6 @@ public class Maze {
   private MazeSquare[][] maze;
   private BufferedImage mazeImg;
   private boolean solutionFound;
-  private String filePath;
   private boolean isInvalidPixel;
 
   /**
@@ -31,8 +32,8 @@ public class Maze {
 
   public Maze(String filePath) throws IOException {
     this.isInvalidPixel = false;
-    this.filePath = filePath;
-    File f = new File(this.filePath);
+    String fPath = filePath;
+    File f = new File(fPath);
     this.mazeImg = ImageIO.read(f);
     this.solutionFound = false;
     this.maze = new MazeSquare[mazeImg.getHeight()][mazeImg.getWidth()];

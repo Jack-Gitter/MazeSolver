@@ -173,7 +173,7 @@ public class View implements ViewModel {
 
   public void updateLeftImage(BufferedImage image) {
         this.solvedMaze = image;
-        this.scaledSolvedMaze  = (image.getScaledInstance(
+        this.scaledUnsolvedMaze  = (image.getScaledInstance(
             (int) (this.frame.getWidth() / 2.5), (int) (this.frame.getHeight() / 1.5),
             Image.SCALE_SMOOTH));
         this.lLabel.setIcon(new ImageIcon(this.scaledUnsolvedMaze));

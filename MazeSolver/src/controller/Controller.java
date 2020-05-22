@@ -36,6 +36,7 @@ public class Controller implements ControllerModel {
       try {
         BufferedImage um = (ImageIO
             .read(new File(this.v.getJfc().getSelectedFile().getAbsolutePath())));
+        System.out.println(um == null);
         this.v.updateLeftImage(um);
       } catch (IOException e) {
         return;

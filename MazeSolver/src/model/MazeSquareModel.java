@@ -97,11 +97,31 @@ public interface MazeSquareModel {
 
   public MazeSquare getRight();
 
+  /**
+   * gets the square to the down left of the current square.
+   * @return the square to the right of the current square.
+   */
+
   public MazeSquare getDownLeft();
+
+  /**
+   * gets the square to the down right of the current square.
+   * @return the square to the right of the current square.
+   */
 
   public MazeSquare getDownRight();
 
+  /**
+   * gets the square to the up left of the current square.
+   * @return the square to the right of the current square.
+   */
+
   public MazeSquare getUpLeft();
+
+  /**
+   * gets the square to the up right of the current square.
+   * @return the square to the right of the current square.
+   */
 
   public MazeSquare getUpRight();
 

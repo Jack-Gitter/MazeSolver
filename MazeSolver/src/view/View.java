@@ -130,38 +130,9 @@ public class View implements ViewModel {
   }
 
   /**
-   * returns the find image button.
-   * @return the find image button.
-   */
-
-  public JButton getFindImage() {
-    return this.findImage;
-  }
-
-  /**
-   * gets the solved maze image.
-   * @return the solved maze image.
-   */
-  public Image getSolvedMaze() {
-    return this.solvedMaze;
-  }
-
-
-  /**
-   * gets the path to the unsolved maze image file.
-   * @return the path to the unsolved maze image file.
-   */
-
-  public String getPathToUnsolvedMaze() {
-    return this.pathToUnsolvedMaze;
-  }
-
-
-  /**
    * gets the algorithms supported by the program.
    * @return the list of algorithms in a box.
    */
-
 
   public JComboBox getAlgos() {
     return this.algos;
@@ -186,9 +157,10 @@ public class View implements ViewModel {
    * updates the right image.
    * @param solvedMaze the solved maze img.
    */
+
   public void updateRightImage(BufferedImage solvedMaze) {
     this.solvedMaze = (solvedMaze);
-    this.scaledSolvedMaze = (this.getSolvedMaze().getScaledInstance(
+    this.scaledSolvedMaze = (this.solvedMaze.getScaledInstance(
         (int) (this.frame.getWidth() / 2.5), (int) (this.frame.getHeight() / 1.5),
         Image.SCALE_SMOOTH));
     this.rLabel.setIcon(new ImageIcon(this.scaledSolvedMaze));

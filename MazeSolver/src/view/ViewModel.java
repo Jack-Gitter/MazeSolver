@@ -22,26 +22,6 @@ public interface ViewModel {
    */
 
   public JFileChooser getJfc();
-  /**
-   * returns the find image button.
-   * @return the find image button.
-   */
-
-  public JButton getFindImage();
-  /**
-   * gets the solved maze image.
-   * @return the solved maze image.
-   */
-  public Image getSolvedMaze();
-
-
-  /**
-   * gets the path to the unsolved maze image file.
-   * @return the path to the unsolved maze image file.
-   */
-
-  public String getPathToUnsolvedMaze();
-
 
   /**
    * gets the algorithms supported by the program.
@@ -61,6 +41,7 @@ public interface ViewModel {
    * updates the right image.
    * @param solvedMaze the solved maze img.
    */
+
   public void updateRightImage(BufferedImage solvedMaze);
 
 }

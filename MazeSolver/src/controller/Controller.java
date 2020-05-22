@@ -17,7 +17,7 @@ import model.*;
 public class Controller implements ControllerModel {
 
   View v;
-
+  MazeModel m;
   /**
    * creates an {@code Controller.Controller} instance.
    * @param v the view that the controller has access to.
@@ -25,6 +25,7 @@ public class Controller implements ControllerModel {
 
   public Controller(View v) {
     this.v = v;
+    this.m = null;
   }
 
   /**
@@ -32,7 +33,7 @@ public class Controller implements ControllerModel {
    */
 
   public void lefButtonClicked() {
-    if (this.v.getJfc().showOpenDialog(this.v.getFindImage()) == JFileChooser.APPROVE_OPTION) {
+    if (this.v.getJfc().showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
       try {
         BufferedImage um = (ImageIO
             .read(new File(this.v.getJfc().getSelectedFile().getAbsolutePath())));
@@ -50,12 +51,12 @@ public class Controller implements ControllerModel {
 
   public void rightButtonClicked() {
     // what class does this belong in?
-    if (v.getJfc().showOpenDialog(v.getFindImage()) == JFileChooser.APPROVE_OPTION) {
+    if (v.getJfc().showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
       File f = new File(v.getJfc().getCurrentDirectory() + "/SolvedMaze.png");
       try {
-        ImageIO.write((RenderedImage) v.getSolvedMaze(), "png", f);
+        ImageIO.write((RenderedImage) m.retrieveSolvedMazeImg(), "png", f);
       } catch (IOException ioException) {
-        ioException.printStackTrace();
+        return;
       }
     }
   }
@@ -67,7 +68,7 @@ public class Controller implements ControllerModel {
   public void middleButtonClicked() {
     // this actual functionality belongs in the view in a method
     try {
-      MazeModel m = new Maze(v.getPathToUnsolvedMaze());
+      this.m = new Maze(v.getJfc().getSelectedFile().getAbsolutePath());
       if (this.v.getAlgos().getSelectedItem().toString().equals("A* Modification")) {
         m.solveMazePriorityQueue();
       } else if (this.v.getAlgos().getSelectedItem().toString().equals("BFS")){

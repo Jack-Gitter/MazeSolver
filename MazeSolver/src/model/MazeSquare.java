@@ -6,7 +6,7 @@ import java.awt.Color;
  * Represents one square in a maze.
  */
 
-public class MazeSquare {
+public class MazeSquare implements MazeSquareModel {
 
   private MazeSquare up, down, left, right, upRight, upLeft, downRight, downLeft, prev;
   private int row, col, distToEnd;
@@ -40,177 +40,122 @@ public class MazeSquare {
     this.downLeft = downLeft;
   }
 
-  /**
-   * Determines if a square is white
-   * @return true if the square is white, false otherwise.
-   */
-
+  @Override
   public boolean isWhite() {
     return this.c.equals(Color.WHITE);
   }
 
-  /**
-   * Sets the color of the square.
-   * @param c Color.
-   */
-
+  @Override
   public void setColor(Color c) {
     this.c = c;
   }
 
-  /**
-   * Gets the previous square in the path to the end.
-   * @return previous square in end path.
-   */
-
+  @Override
   public MazeSquare getPrev() {
     return this.prev;
   }
 
-  /**
-   * Sets the square above the current square.
-   * @param up square above the current square.
-   */
-
+  @Override
   public void setUp(MazeSquare up) {
     this.up = up;
   }
 
-  /**
-   * Sets the square below the current square.
-   * @param down the square below the current square.
-   */
-
+  @Override
   public void setDown(MazeSquare down) {
     this.down = down;
   }
 
-  /**
-   * Sets the square to the left of the current square.
-   * @param left square to the left of the current square.
-   */
-
+  @Override
   public void setLeft(MazeSquare left) {
     this.left = left;
   }
 
-  /**
-   * Sets the square to the right of the current square.
-   * @param right square to the right of the current square.
-   */
-
+  @Override
   public void setRight(MazeSquare right) {
     this.right = right;
   }
 
-  /**
-   * Sets the previous square in the path to the end.
-   * @param prev the previous square in the path to the end.
-   */
-
+  @Override
   public void setPrev(MazeSquare prev) {
     this.prev = prev;
   }
 
+  @Override
   public void setUpRight(MazeSquare m) {
     this.upRight = m;
   }
 
+  @Override
   public void setUpLeft(MazeSquare m) {
     this.upLeft = m;
   }
 
+  @Override
   public void setDownRight(MazeSquare m) {
     this.downRight = m;
   }
 
+  @Override
   public void setDownLeft(MazeSquare m) {
     this.downLeft = m;
   }
-  /**
-   * Gets the color of the current square.
-   * @return color of the current square.
-   */
 
+  @Override
   public Color getColor() {
     return this.c;
   }
 
-  /**
-   * gets the square above the current square.
-   * @return the square above the current square.
-   */
-
+  @Override
   public MazeSquare getUp() {
     return this.up;
   }
 
-  /**
-   * gets the square below the current square.
-   * @return the square below the current square.
-   */
-
+  @Override
   public MazeSquare getDown() {
     return this.down;
   }
 
-  /**
-   * gets the square to the left of the current square.
-   * @return the square to the left of the current square.
-   */
-
+  @Override
   public MazeSquare getLeft() {
     return this.left;
   }
 
-  /**
-   * gets the square to the right of the current square.
-   * @return the square to the right of the current squre.
-   */
-
+  @Override
   public MazeSquare getRight() {
     return this.right;
   }
 
+  @Override
   public MazeSquare getDownLeft() {
     return downLeft;
   }
 
+  @Override
   public MazeSquare getDownRight() {
     return downRight;
   }
 
+  @Override
   public MazeSquare getUpLeft() {
     return upLeft;
   }
 
+  @Override
   public MazeSquare getUpRight() {
     return upRight;
   }
 
-  /**
-   * gets the row the square is on in the maze.
-   * @return the row the square is on.
-   */
-
+  @Override
   public int getRow() {
     return this.row;
   }
 
-  /**
-   * gets the column that the square is on in the maze.
-   * @return the column the square is on.
-   */
-
+  @Override
   public int getCol() {
     return this.col;
   }
 
-  /**
-   * gets the distance to the end from the current square.
-   * @return distance to the end.
-   */
-
+  @Override
   public int getDistToEnd() {
     return this.distToEnd;
   }

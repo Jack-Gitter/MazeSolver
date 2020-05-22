@@ -16,7 +16,6 @@ import javax.imageio.ImageIO;
  * Represents a maze.
  */
 
-// assumption that the maze's start width is the same as the other widths is wrong, find a good balance
 public class Maze implements MazeModel {
 
   private MazeSquare[][] maze;
@@ -40,10 +39,7 @@ public class Maze implements MazeModel {
     this.initMaze();
   }
 
-  /**
-   * solves the maze.
-   */
-
+  @Override
   public void solveMazeBFS() {
     Deque<MazeSquare> dq = new LinkedList<MazeSquare>();
     MazeSquare startSquare = this.findStartSquare();
@@ -88,10 +84,7 @@ public class Maze implements MazeModel {
     }
   }
 
-  /**
-   * solves the maze.
-   */
-
+  @Override
   public void solveMazeDFS() {
     Deque<MazeSquare> dq = new LinkedList<MazeSquare>();
     MazeSquare startSquare = this.findStartSquare();
@@ -136,10 +129,7 @@ public class Maze implements MazeModel {
     }
   }
 
-  /**
-   * Solves the maze.
-   */
-
+  @Override
   public void solveMazePriorityQueue() {
     Comparator<MazeSquare> c = (m1, m2) -> m2.getDistToEnd() - m1.getDistToEnd();
     PriorityQueue<MazeSquare> pq = new PriorityQueue<>(c);
@@ -197,7 +187,7 @@ public class Maze implements MazeModel {
 
   /**
    * Gets the width of the entrance of the maze.
-   * @return the width of the entrace.
+   * @return the width of the entrance.
    */
 
   private int getStartWidth() {

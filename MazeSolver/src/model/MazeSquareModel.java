@@ -4,6 +4,11 @@ import java.awt.Color;
 
 public interface MazeSquareModel {
 
+  /**
+   * Determines if a square is white
+   * @return true if the square is white, false otherwise.
+   */
+
   public boolean isWhite();
 
   /**

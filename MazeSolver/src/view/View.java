@@ -115,29 +115,18 @@ public class View implements ViewModel {
 
   }
 
-  /**
-   * returns the file chooser.
-   * @return the file chooser.
-   */
-
+  @Override
   public JFileChooser getJfc() {
     return this.jfcUnsolvedMazeChooser;
   }
 
 
-  /**
-   * gets the algorithms supported by the program.
-   * @return the list of algorithms in a box.
-   */
-
+  @Override
   public JComboBox getAlgos() {
     return this.algos;
   }
 
-  /**
-   * updates the left image.
-   */
-
+  @Override
   public void updateLeftImage(BufferedImage image) {
         this.scaledUnsolvedMaze  = (image.getScaledInstance(
             (int) (this.frame.getWidth() / 2.5), (int) (this.frame.getHeight() / 1.5),
@@ -147,11 +136,7 @@ public class View implements ViewModel {
         this.frame.repaint();
     }
 
-  /**
-   * updates the right image.
-   * @param image the solved maze img.
-   */
-
+  @Override
   public void updateRightImage(BufferedImage image) {
     this.scaledSolvedMaze = (image.getScaledInstance(
         (int) (this.frame.getWidth() / 2.5), (int) (this.frame.getHeight() / 1.5),

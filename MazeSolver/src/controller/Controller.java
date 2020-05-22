@@ -19,6 +19,7 @@ public class Controller implements ControllerModel {
   View v;
   MazeModel m;
   String currentUnsolved;
+
   /**
    * creates an {@code Controller.Controller} instance.
    * @param v the view that the controller has access to.
@@ -32,10 +33,8 @@ public class Controller implements ControllerModel {
 
 
 
-  /**
-   * Determines what to do if the left button is clicked.
-   */
 
+  @Override
   public void lefButtonClicked() {
     if (this.v.getJfc().showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
       try {
@@ -49,12 +48,8 @@ public class Controller implements ControllerModel {
     }
   }
 
-  /**
-   * Determines what to do if the right button is clicked.
-   */
-
+  @Override
   public void rightButtonClicked() {
-    // what class does this belong in?
     if (m != null) {
       if (v.getJfc().showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
         File f = new File(v.getJfc().getCurrentDirectory() + "/SolvedMaze.png");
@@ -67,14 +62,8 @@ public class Controller implements ControllerModel {
     }
   }
 
-  /**
-   * Determines what to do if the middle button is clicked.
-   */
-
-  // need two file choosers.
+  @Override
   public void middleButtonClicked() {
-    // this actual functionality belongs in the view in a method
-
     try {
       this.v.getJfc().setSelectedFile(new File(this.currentUnsolved));
       this.m = new Maze(v.getJfc().getSelectedFile().getAbsolutePath());

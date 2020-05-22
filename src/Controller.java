@@ -31,27 +31,15 @@ public class Controller {
    */
 
   public void lefButtonClicked() {
-    if (v.getJfc().showOpenDialog(v.getFindImage()) == JFileChooser.APPROVE_OPTION) {
-      try {
-        this.v.setUnsolvedMaze(ImageIO.read(new File(this.v.getJfc().getSelectedFile().getAbsolutePath())));
-        this.v.setScaledUnsolvedMaze(v.getUnsolvedMaze().getScaledInstance(
-            (int) (this.v.getFrame().getWidth() / 2.5), (int) (this.v.getFrame().getHeight() / 1.5),
-            Image.SCALE_SMOOTH));
-        this.v.getlLabel().setIcon(new ImageIcon(this.v.getScaledUnsolvedMaze()));
-        this.v.setPathToUnsolvedMaze(v.getJfc().getSelectedFile().getAbsolutePath());
-        this.v.revalidateFrame();
-        this.v.repaint();
-      } catch (IOException ioException) {
-        ioException.printStackTrace();
-      }
-    }
+    this.v.updateLeftImage();
   }
 
   /**
-   * Determines what to do if the rigth button is clicked.
+   * Determines what to do if the right button is clicked.
    */
 
   public void rightButtonClicked() {
+    // what class does this belong in?
     if (v.getJfc().showOpenDialog(v.getFindImage()) == JFileChooser.APPROVE_OPTION) {
       File f = new File(v.getJfc().getCurrentDirectory() + "/SolvedMaze.png");
       try {
@@ -67,6 +55,7 @@ public class Controller {
    */
 
   public void middleButtonClicked() {
+    // this actual functionality belongs in the view in a method
     try {
       Maze m = new Maze(v.getPathToUnsolvedMaze());
       if (this.v.getAlgos().getSelectedItem().toString().equals("A* Modification")) {
@@ -76,13 +65,7 @@ public class Controller {
       } else if (this.v.getAlgos().getSelectedItem().toString().equals("DFS")) {
         m.solveMazeDFS();
       }
-      this.v.setSolvedMaze(m.retrieveSolvedMazeImg());
-      this.v.setScaledSolvedMaze(v.getSolvedMaze().getScaledInstance(
-          (int) (this.v.getFrame().getWidth() / 2.5), (int) (this.v.getFrame().getHeight() / 1.5),
-          Image.SCALE_SMOOTH));
-      this.v.getRLabel().setIcon(new ImageIcon(this.v.getScaledUnsolvedMaze()));
-      this.v.revalidateFrame();
-      this.v.repaint();
+      this.v.updateRightImage(m);
     } catch (IOException ioException) {
       return;
     } catch (IllegalArgumentException iaException) {

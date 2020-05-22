@@ -171,22 +171,16 @@ public class View implements ViewModel {
    * updates the left image.
    */
 
-  public void updateLeftImage() {
-    if (this.getJfc().showOpenDialog(this.getFindImage()) == JFileChooser.APPROVE_OPTION) {
-      try {
-        this.unsolvedMaze = (ImageIO.read(new File(this.getJfc().getSelectedFile().getAbsolutePath())));
-        this.scaledUnsolvedMaze = (this.unsolvedMaze.getScaledInstance(
+  public void updateLeftImage(BufferedImage image) {
+        this.solvedMaze = image;
+        this.scaledSolvedMaze  = (image.getScaledInstance(
             (int) (this.frame.getWidth() / 2.5), (int) (this.frame.getHeight() / 1.5),
             Image.SCALE_SMOOTH));
         this.lLabel.setIcon(new ImageIcon(this.scaledUnsolvedMaze));
         this.pathToUnsolvedMaze = (this.getJfc().getSelectedFile().getAbsolutePath());
         this.frame.revalidate();
         this.frame.repaint();
-      } catch (IOException ioException) {
-        ioException.printStackTrace();
-      }
     }
-  }
 
   /**
    * updates the right image.

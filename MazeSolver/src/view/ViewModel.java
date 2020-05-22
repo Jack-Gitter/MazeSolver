@@ -55,7 +55,7 @@ public interface ViewModel {
    * updates the left image.
    */
 
-  public void updateLeftImage();
+  public void updateLeftImage(BufferedImage image);
 
   /**
    * updates the right image.

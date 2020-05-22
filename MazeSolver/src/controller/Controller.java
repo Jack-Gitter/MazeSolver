@@ -1,8 +1,11 @@
 package controller;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.Buffer;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import view.*;
@@ -29,7 +32,15 @@ public class Controller implements ControllerModel {
    */
 
   public void lefButtonClicked() {
-    this.v.updateLeftImage();
+    if (this.v.getJfc().showOpenDialog(this.v.getFindImage()) == JFileChooser.APPROVE_OPTION) {
+      try {
+        BufferedImage um = (ImageIO
+            .read(new File(this.v.getJfc().getSelectedFile().getAbsolutePath())));
+        this.v.updateLeftImage(um);
+      } catch (IOException e) {
+        return;
+      }
+    }
   }
 
   /**

@@ -75,7 +75,7 @@ public class View {
     this.algos = new JComboBox<String>(new String[]{"A* Modification", "BFS", "DFS"});
 
     // parameters for right button
-    this.downloadImage.addActionListener(new RightButtonController(this));
+    this.downloadImage.addActionListener(new RightButtonController(new Controller(this)));
 
     // initialize file chooser
     this.jfc = new JFileChooser();
@@ -110,10 +110,10 @@ public class View {
     this.frame.add(this.box3, BorderLayout.NORTH);
 
     // set action listener for the find maze button
-    this.findImage.addActionListener(new leftButtonController(this));
+    this.findImage.addActionListener(new leftButtonController(new Controller(this)));
 
     // set action listener for the solve maze button
-    this.solveMaze.addActionListener(new MiddleButtonController(this));
+    this.solveMaze.addActionListener(new MiddleButtonController(new Controller(this)));
 
     // display the frame.
     this.frame.setVisible(true);

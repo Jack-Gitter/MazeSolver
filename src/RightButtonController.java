@@ -8,23 +8,25 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 
+/**
+ * An action listener for the right button.
+ */
+
 public class RightButtonController implements ActionListener {
 
-  View v;
+  Controller c;
 
-  public RightButtonController(View v) {
-    this.v = v;
+  /**
+   * Instantiates the action listener.
+   * @param c the {@code Controller} instance.
+   */
+
+  public RightButtonController(Controller c) {
+    this.c = c;
   }
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    if (v.getJfc().showOpenDialog(v.getFindImage()) == JFileChooser.APPROVE_OPTION) {
-      File f = new File(v.getJfc().getCurrentDirectory() + "/SolvedMaze.png");
-      try {
-        ImageIO.write((RenderedImage) v.getSolvedMaze(), "png", f);
-      } catch (IOException ioException) {
-        ioException.printStackTrace();
-      }
-    }
+    this.c.rightButtonClicked();
   }
 }

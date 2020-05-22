@@ -7,28 +7,25 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 
+/**
+ * Action Listener for the left button.
+ */
+
 class leftButtonController implements ActionListener {
 
-  View v;
+  Controller c;
 
-  public leftButtonController(View v) {
-    this.v = v;
+  /**
+   * Instantiates the action listener.
+   * @param c the controller that the action listener has access to.
+   */
+
+  public leftButtonController(Controller c) {
+    this.c = c;
   }
+
   @Override
   public void actionPerformed(ActionEvent e) {
-    if (v.getJfc().showOpenDialog(v.getFindImage()) == JFileChooser.APPROVE_OPTION) {
-      try {
-        this.v.setUnsolvedMaze(ImageIO.read(new File(this.v.getJfc().getSelectedFile().getAbsolutePath())));
-        this.v.setScaledUnsolvedMaze(v.getUnsolvedMaze().getScaledInstance(
-            (int) (this.v.getFrame().getWidth() / 2.5), (int) (this.v.getFrame().getHeight() / 1.5),
-            Image.SCALE_SMOOTH));
-        this.v.getlLabel().setIcon(new ImageIcon(this.v.getScaledUnsolvedMaze()));
-        this.v.setPathToUnsolvedMaze(v.getJfc().getSelectedFile().getAbsolutePath());
-        this.v.revalidateFrame();
-        this.v.repaint();
-      } catch (IOException ioException) {
-        ioException.printStackTrace();
-      }
-    }
+    this.c.lefButtonClicked();
   }
 }

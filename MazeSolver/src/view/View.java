@@ -1,13 +1,13 @@
 package view;
 
 import controller.Controller;
+import controller.LeftButtonController;
+import controller.MiddleButtonController;
+import controller.RightButtonController;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;

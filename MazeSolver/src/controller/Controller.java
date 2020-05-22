@@ -30,6 +30,8 @@ public class Controller implements ControllerModel {
     this.currentUnsolved = "";
   }
 
+
+
   /**
    * Determines what to do if the left button is clicked.
    */

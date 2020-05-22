@@ -55,11 +55,31 @@ public interface MazeSquareModel {
 
   public void setPrev(MazeSquare prev);
 
+  /**
+   * sets the up right square.
+   * @param m the square to set.
+   */
+
   public void setUpRight(MazeSquare m);
+
+  /**
+   * sets the up left square.
+   * @param m the square to set.
+   */
 
   public void setUpLeft(MazeSquare m);
 
+  /**
+   * sets the down right square.
+   * @param m the square to set.
+   */
+
   public void setDownRight(MazeSquare m);
+
+  /**
+   * sets the down left square.
+   * @param m the square to set.
+   */
 
   public void setDownLeft(MazeSquare m);
   /**

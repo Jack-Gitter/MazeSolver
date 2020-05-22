@@ -18,6 +18,7 @@ public class Controller implements ControllerModel {
 
   View v;
   MazeModel m;
+  String currentUnsolved;
   /**
    * creates an {@code Controller.Controller} instance.
    * @param v the view that the controller has access to.
@@ -26,6 +27,7 @@ public class Controller implements ControllerModel {
   public Controller(View v) {
     this.v = v;
     this.m = null;
+    this.currentUnsolved = "";
   }
 
   /**
@@ -35,9 +37,9 @@ public class Controller implements ControllerModel {
   public void lefButtonClicked() {
     if (this.v.getJfc().showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
       try {
+        this.currentUnsolved = this.v.getJfc().getSelectedFile().getAbsolutePath().toString();
         BufferedImage um = (ImageIO
             .read(new File(this.v.getJfc().getSelectedFile().getAbsolutePath())));
-        System.out.println(um == null);
         this.v.updateLeftImage(um);
       } catch (IOException e) {
         return;
@@ -51,12 +53,14 @@ public class Controller implements ControllerModel {
 
   public void rightButtonClicked() {
     // what class does this belong in?
-    if (v.getJfc().showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-      File f = new File(v.getJfc().getCurrentDirectory() + "/SolvedMaze.png");
-      try {
-        ImageIO.write((RenderedImage) m.retrieveSolvedMazeImg(), "png", f);
-      } catch (IOException ioException) {
-        return;
+    if (m != null) {
+      if (v.getJfc().showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+        File f = new File(v.getJfc().getCurrentDirectory() + "/SolvedMaze.png");
+        try {
+          ImageIO.write((RenderedImage) m.retrieveSolvedMazeImg(), "png", f);
+        } catch (IOException ioException) {
+          return;
+        }
       }
     }
   }
@@ -65,18 +69,21 @@ public class Controller implements ControllerModel {
    * Determines what to do if the middle button is clicked.
    */
 
+  // need two file choosers.
   public void middleButtonClicked() {
     // this actual functionality belongs in the view in a method
+
     try {
+      this.v.getJfc().setSelectedFile(new File(this.currentUnsolved));
       this.m = new Maze(v.getJfc().getSelectedFile().getAbsolutePath());
       if (this.v.getAlgos().getSelectedItem().toString().equals("A* Modification")) {
-        m.solveMazePriorityQueue();
+        this.m.solveMazePriorityQueue();
       } else if (this.v.getAlgos().getSelectedItem().toString().equals("BFS")){
-        m.solveMazeBFS();
+        this.m.solveMazeBFS();
       } else if (this.v.getAlgos().getSelectedItem().toString().equals("DFS")) {
-        m.solveMazeDFS();
+        this.m.solveMazeDFS();
       }
-      this.v.updateRightImage(m.retrieveSolvedMazeImg());
+      this.v.updateRightImage(this.m.retrieveSolvedMazeImg());
     } catch (IOException ioException) {
       return;
     } catch (IllegalArgumentException iaException) {

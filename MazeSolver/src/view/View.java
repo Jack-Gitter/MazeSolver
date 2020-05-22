@@ -33,7 +33,7 @@ public class View implements ViewModel {
   private Box box3;
   private JLabel lLabel;
   private JLabel rLabel;
-  private JFileChooser jfc;
+  private JFileChooser jfcUnsolvedMazeChooser;
   private Image scaledUnsolvedMaze;
   private Image scaledSolvedMaze;
   private final JComboBox<String> algos;
@@ -66,13 +66,10 @@ public class View implements ViewModel {
     // initialize JComboBox
     this.algos = new JComboBox<String>(new String[]{"A* Modification", "BFS", "DFS"});
 
-    // parameters for right button
-    this.downloadImage.addActionListener(new RightButtonController(new Controller(this)));
-
     // initialize file chooser
-    this.jfc = new JFileChooser();
-    this.jfc.setCurrentDirectory(null);
-    this.jfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+    this.jfcUnsolvedMazeChooser = new JFileChooser();
+    this.jfcUnsolvedMazeChooser.setCurrentDirectory(null);
+    this.jfcUnsolvedMazeChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 
     // initialize box layouts
     this.box2 = Box.createHorizontalBox();
@@ -101,11 +98,17 @@ public class View implements ViewModel {
     this.box3.add(this.algos);
     this.frame.add(this.box3, BorderLayout.NORTH);
 
+    // set a controller for the action listeners
+    Controller c = new Controller(this);
+
+    // parameters for right button
+    this.downloadImage.addActionListener(new RightButtonController(c));
+
     // set action listener for the find maze button
-    this.findImage.addActionListener(new LeftButtonController(new Controller(this)));
+    this.findImage.addActionListener(new LeftButtonController(c));
 
     // set action listener for the solve maze button
-    this.solveMaze.addActionListener(new MiddleButtonController(new Controller(this)));
+    this.solveMaze.addActionListener(new MiddleButtonController(c));
 
     // display the frame.
     this.frame.setVisible(true);
@@ -118,8 +121,9 @@ public class View implements ViewModel {
    */
 
   public JFileChooser getJfc() {
-    return this.jfc;
+    return this.jfcUnsolvedMazeChooser;
   }
+
 
   /**
    * gets the algorithms supported by the program.

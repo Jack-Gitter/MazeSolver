@@ -1,12 +1,15 @@
 package controller;
 
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.Buffer;
 import javax.imageio.ImageIO;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import view.*;
 import model.*;
@@ -32,7 +35,12 @@ public class Controller implements ControllerModel {
   }
 
 
-
+  public void initActionListeners() {
+    JButton[] buttons = this.v.getButtons();
+    for (JButton b : buttons) {
+      this.setButtonActionListener(b);
+    }
+  }
 
   @Override
   public void lefButtonClicked() {
@@ -81,4 +89,86 @@ public class Controller implements ControllerModel {
       return;
     }
   }
+
+  @Override
+  public void setButtonActionListener(JButton b) {
+    if (b.getText().equals("import maze")) {
+      b.addActionListener(new Controller.LeftButtonController(this));
+    } else if (b.getText().equals("solve")) {
+      b.addActionListener(new Controller.MiddleButtonController(this));
+    } else if (b.getText().equals("download solved")) {
+      b.addActionListener(new Controller.RightButtonController(this));
+    }
+  }
+
+  /**
+   * represents a action listener for the left button.
+   */
+
+  static class LeftButtonController implements ActionListener {
+
+    Controller c;
+
+    /**
+     * Instantiates the action listener.
+     * @param c the controller that the action listener has access to.
+     */
+
+    public LeftButtonController(Controller c) {
+      this.c = c;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+      this.c.lefButtonClicked();
+    }
+  }
+
+  /**
+   * represents an action listener for the middle button.
+   */
+
+  static class MiddleButtonController implements ActionListener {
+
+    Controller c;
+
+    /**
+     * Instantiates the action listener
+     * @param c the {@code Controller.Controller} instance.
+     */
+
+    public MiddleButtonController(Controller c) {
+      this.c = c;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+      c.middleButtonClicked();
+    }
+  }
+
+  /**
+   * represents an action listener for the right button.
+   */
+
+  static class RightButtonController implements ActionListener {
+
+    Controller c;
+
+    /**
+     * Instantiates the action listener.
+     * @param c the {@code Controller.Controller} instance.
+     */
+
+    public RightButtonController(Controller c) {
+      this.c = c;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+      this.c.rightButtonClicked();
+    }
+  }
+
+
 }

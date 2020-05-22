@@ -44,4 +44,11 @@ public interface ViewModel {
 
   public void updateRightImage(BufferedImage solvedMaze);
 
+  /**
+   * gets the buttons for initialization of action listeners by the controller.
+   * @return the buttons of the view.
+   */
+
+  public JButton[] getButtons();
+
 }

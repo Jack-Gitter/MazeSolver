@@ -1,9 +1,6 @@
 package view;
 
 import controller.Controller;
-import controller.LeftButtonController;
-import controller.MiddleButtonController;
-import controller.RightButtonController;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Image;
@@ -98,18 +95,6 @@ public class View implements ViewModel {
     this.box3.add(this.algos);
     this.frame.add(this.box3, BorderLayout.NORTH);
 
-    // set a controller for the action listeners
-    Controller c = new Controller(this);
-
-    // parameters for right button
-    this.downloadImage.addActionListener(new RightButtonController(c));
-
-    // set action listener for the find maze button
-    this.findImage.addActionListener(new LeftButtonController(c));
-
-    // set action listener for the solve maze button
-    this.solveMaze.addActionListener(new MiddleButtonController(c));
-
     // display the frame.
     this.frame.setVisible(true);
 
@@ -144,6 +129,11 @@ public class View implements ViewModel {
     this.rLabel.setIcon(new ImageIcon(this.scaledSolvedMaze));
     this.frame.revalidate();
     this.frame.repaint();
+  }
+
+  @Override
+  public JButton[] getButtons() {
+    return new JButton[]{this.downloadImage, this.findImage, this.solveMaze};
   }
 
 

@@ -4,6 +4,7 @@ import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import model.Maze;
 import model.MazeModel;
@@ -29,5 +30,12 @@ public interface ControllerModel {
    */
 
   public void middleButtonClicked();
+
+  /**
+   * Sets the action listener of the views button for a specific button.
+   * @param b the button given from the view.
+   */
+
+  public void setButtonActionListener(JButton b);
 
 }

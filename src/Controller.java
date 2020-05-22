@@ -23,6 +23,9 @@ public class Controller {
     this.v = v;
   }
 
+  public void go() {
+    this.v = new View();
+  }
   /**
    * Determines what to do if the left button is clicked.
    */

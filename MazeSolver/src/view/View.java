@@ -21,7 +21,7 @@ import javax.swing.JPanel;
  * Handles graphics for the program.
  */
 
-public class View {
+public class View implements ViewModel {
 
   private JFrame frame;
   private JPanel panel;

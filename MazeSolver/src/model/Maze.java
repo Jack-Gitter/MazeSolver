@@ -131,7 +131,7 @@ public class Maze implements MazeModel {
 
   @Override
   public void solveMazePriorityQueue() {
-    Comparator<MazeSquare> c = (m1, m2) -> m2.getDistToEnd() - m1.getDistToEnd();
+    Comparator<MazeSquare> c = (m1, m2) -> m1.getManhattanDist() - m2.getManhattanDist();
     PriorityQueue<MazeSquare> pq = new PriorityQueue<>(c);
     MazeSquare startSquare = this.findStartSquare();
     Set<MazeSquare> visited = new HashSet<>();
@@ -377,13 +377,23 @@ public class Maze implements MazeModel {
    */
 
   private void setColors() {
+    int endCord = this.findEndCord();
     for (int i = 0; i < this.mazeImg.getHeight(); i++) {
       for (int j = 0; j < this.mazeImg.getWidth(); j++) {
         maze[i][j] = new MazeSquare(null, null, null, null, null,
             null, null, null, i, j,
-            i - mazeImg.getHeight(), new Color(mazeImg.getRGB(j,i)));
+            (Math.abs(mazeImg.getHeight() - i)), (Math.abs(endCord - j)), new Color(mazeImg.getRGB(j,i)));
       }
     }
+  }
+
+  private int findEndCord() {
+    for (int i = 0; i < this.mazeImg.getWidth(); i++) {
+      if (this.mazeImg.getRGB(i, this.mazeImg.getHeight()-1) == Color.white.getRGB()) {
+        return i;
+      }
+    }
+    return -1;
   }
 
 }

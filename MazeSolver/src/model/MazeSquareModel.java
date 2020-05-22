@@ -164,10 +164,24 @@ public interface MazeSquareModel {
   public int getCol();
 
   /**
-   * gets the distance to the end from the current square.
+   * gets the distance to the end from the current square down.
    * @return distance to the end.
    */
 
-  public int getDistToEnd();
+  public int getDistToEndDown();
+
+  /**
+   * gets the distance to the end from the current square horizontally.
+   * @return distance to the end.
+   */
+
+  public int getDistToEndLeftRight();
+
+  /**
+   * gets the manhattan distance from the square to the end.
+   * @return the manhattan distance to the end.
+   */
+
+  public int getManhattanDist();
 
 }

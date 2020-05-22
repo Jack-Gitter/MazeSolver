@@ -9,7 +9,7 @@ import java.awt.Color;
 public class MazeSquare implements MazeSquareModel {
 
   private MazeSquare up, down, left, right, upRight, upLeft, downRight, downLeft, prev;
-  private int row, col, distToEnd;
+  private int row, col, distToEndDown, distToEndLeftRight;
   private Color c;
 
   /**
@@ -24,7 +24,8 @@ public class MazeSquare implements MazeSquareModel {
    */
 
   public MazeSquare(MazeSquare up, MazeSquare down, MazeSquare left, MazeSquare right,
-      MazeSquare upRight, MazeSquare upLeft, MazeSquare downRight, MazeSquare downLeft, int row, int col, int distToEnd, Color c) {
+      MazeSquare upRight, MazeSquare upLeft, MazeSquare downRight, MazeSquare downLeft, int row,
+      int col, int distToEndDown, int distToEndLeftRight, Color c) {
     this.up = up;
     this.down = down;
     this.left = left;
@@ -33,7 +34,8 @@ public class MazeSquare implements MazeSquareModel {
     this.col = col;
     this.c = c;
     this.prev = null;
-    this.distToEnd = distToEnd;
+    this.distToEndDown = distToEndDown;
+    this.distToEndLeftRight = distToEndLeftRight;
     this.upRight = upRight;
     this.upLeft = upLeft;
     this.downRight = downRight;
@@ -156,8 +158,18 @@ public class MazeSquare implements MazeSquareModel {
   }
 
   @Override
-  public int getDistToEnd() {
-    return this.distToEnd;
+  public int getDistToEndDown() {
+    return this.distToEndDown;
+  }
+
+  @Override
+  public int getDistToEndLeftRight() {
+    return this.distToEndLeftRight;
+  }
+
+  @Override
+  public int getManhattanDist() {
+    return this.distToEndDown + this.distToEndLeftRight;
   }
 
 }

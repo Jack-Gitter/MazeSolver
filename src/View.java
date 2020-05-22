@@ -190,10 +190,10 @@ public class View {
 
   /**
    * updates the right image.
-   * @param m
+   * @param solvedMaze the solved maze img.
    */
-  public void updateRightImage(Maze m) {
-    this.solvedMaze = (m.retrieveSolvedMazeImg());
+  public void updateRightImage(BufferedImage solvedMaze) {
+    this.solvedMaze = (solvedMaze);
     this.scaledSolvedMaze = (this.getSolvedMaze().getScaledInstance(
         (int) (this.frame.getWidth() / 2.5), (int) (this.frame.getHeight() / 1.5),
         Image.SCALE_SMOOTH));

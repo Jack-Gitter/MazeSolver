@@ -65,7 +65,7 @@ public class Controller {
       } else if (this.v.getAlgos().getSelectedItem().toString().equals("DFS")) {
         m.solveMazeDFS();
       }
-      this.v.updateRightImage(m);
+      this.v.updateRightImage(m.retrieveSolvedMazeImg());
     } catch (IOException ioException) {
       return;
     } catch (IllegalArgumentException iaException) {

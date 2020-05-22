@@ -31,19 +31,15 @@ public class View implements ViewModel {
   private Box box1;
   private Box box2;
   private Box box3;
-  private BufferedImage unsolvedMaze;
-  private BufferedImage solvedMaze;
   private JLabel lLabel;
   private JLabel rLabel;
   private JFileChooser jfc;
   private Image scaledUnsolvedMaze;
   private Image scaledSolvedMaze;
-  private String pathToUnsolvedMaze;
   private final JComboBox<String> algos;
 
   public View() {
 
-    this.pathToUnsolvedMaze = "";
 
     // initialize frame
     this.frame = new JFrame("Model.Maze Solver");
@@ -53,10 +49,6 @@ public class View implements ViewModel {
 
     // initialize panel
     this.panel = new JPanel();
-
-    // initialize images
-    this.unsolvedMaze = null;
-    this.solvedMaze = null;
 
     // scale images to fit in jFrame
     this.scaledUnsolvedMaze  = null;
@@ -143,24 +135,21 @@ public class View implements ViewModel {
    */
 
   public void updateLeftImage(BufferedImage image) {
-        this.solvedMaze = image;
         this.scaledUnsolvedMaze  = (image.getScaledInstance(
             (int) (this.frame.getWidth() / 2.5), (int) (this.frame.getHeight() / 1.5),
             Image.SCALE_SMOOTH));
         this.lLabel.setIcon(new ImageIcon(this.scaledUnsolvedMaze));
-        this.pathToUnsolvedMaze = (this.getJfc().getSelectedFile().getAbsolutePath());
         this.frame.revalidate();
         this.frame.repaint();
     }
 
   /**
    * updates the right image.
-   * @param solvedMaze the solved maze img.
+   * @param image the solved maze img.
    */
 
-  public void updateRightImage(BufferedImage solvedMaze) {
-    this.solvedMaze = (solvedMaze);
-    this.scaledSolvedMaze = (this.solvedMaze.getScaledInstance(
+  public void updateRightImage(BufferedImage image) {
+    this.scaledSolvedMaze = (image.getScaledInstance(
         (int) (this.frame.getWidth() / 2.5), (int) (this.frame.getHeight() / 1.5),
         Image.SCALE_SMOOTH));
     this.rLabel.setIcon(new ImageIcon(this.scaledSolvedMaze));

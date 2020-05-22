@@ -19,7 +19,9 @@ public class MiddleButtonController implements ActionListener {
       if (this.v.getAlgos().getSelectedItem().toString().equals("A* Modification")) {
         m.solveMazePriorityQueue();
       } else if (this.v.getAlgos().getSelectedItem().toString().equals("BFS")){
-        m.solveMazeFloodFill();
+        m.solveMazeBFS();
+      } else if (this.v.getAlgos().getSelectedItem().toString().equals("DFS")) {
+        m.solveMazeDFS();
       }
       this.v.setSolvedMaze(m.retrieveSolvedMazeImg());
       this.v.setScaledSolvedMaze(v.getSolvedMaze().getScaledInstance(

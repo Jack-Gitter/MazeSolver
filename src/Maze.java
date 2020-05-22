@@ -44,7 +44,7 @@ public class Maze {
    * solves the maze.
    */
 
-  public void solveMazeFloodFill() {
+  public void solveMazeBFS() {
     Deque<MazeSquare> dq = new LinkedList<MazeSquare>();
     MazeSquare startSquare = this.findStartSquare();
     Set<MazeSquare> visited = new HashSet<>();
@@ -81,6 +81,54 @@ public class Maze {
       this.isInvalidPixel = false;
       if (this.squareIsValid(curr.getRight(), visited)) {
         dq.offerLast(curr.getRight());
+        visited.add(curr.getRight());
+        this.setPrev(curr.getRight(), curr);
+      }
+      this.isInvalidPixel = false;
+    }
+  }
+
+  /**
+   * solves the maze.
+   */
+
+  public void solveMazeDFS() {
+    Deque<MazeSquare> dq = new LinkedList<MazeSquare>();
+    MazeSquare startSquare = this.findStartSquare();
+    Set<MazeSquare> visited = new HashSet<>();
+    if (startSquare == null) {
+      return;
+    }
+    dq.offerFirst(startSquare);
+    while (dq.size() != 0) {
+      MazeSquare curr = dq.pollFirst();
+      this.mazeImg.setRGB(curr.getCol(), curr.getRow(), new Color(3, 252, 211).getRGB());
+      visited.add(curr);
+      if (this.checkForSolution(curr)) {
+        this.setAllPrevToRed(curr);
+        this.solutionFound = true;
+        break;
+      }
+      if (this.squareIsValid(curr.getUp(), visited)) {
+        dq.offerFirst(curr.getUp());
+        visited.add(curr.getUp());
+        this.setPrev(curr.getUp(), curr);
+      }
+      this.isInvalidPixel = false;
+      if (this.squareIsValid(curr.getDown(), visited)) {
+        dq.offerFirst(curr.getDown());
+        visited.add(curr.getDown());
+        this.setPrev(curr.getDown(), curr);
+      }
+      this.isInvalidPixel = false;
+      if (this.squareIsValid(curr.getLeft(), visited)) {
+        dq.offerFirst(curr.getLeft());
+        visited.add(curr.getLeft());
+        this.setPrev(curr.getLeft(), curr);
+      }
+      this.isInvalidPixel = false;
+      if (this.squareIsValid(curr.getRight(), visited)) {
+        dq.offerFirst(curr.getRight());
         visited.add(curr.getRight());
         this.setPrev(curr.getRight(), curr);
       }

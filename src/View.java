@@ -17,9 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-// things left to do: make the screen dynamic.
-// add a algorithm picker, so the user can choose which algorithm they want
-// to see implemented
+// add dfs
 
 /**
  * Handles graphics for the program.
@@ -65,6 +63,7 @@ public class View {
     // scale images to fit in jFrame
     this.scaledUnsolvedMaze  = null;
     this.scaledSolvedMaze = null;
+
     // initialize buttons
     this.solveMaze = new JButton("solve");
     this.findImage = new JButton("import maze");
@@ -75,7 +74,7 @@ public class View {
     this.rLabel = new JLabel();
 
     // initialize JComboBox
-    this.algos = new JComboBox<String>(new String[]{"A* Modification", "BFS"});
+    this.algos = new JComboBox<String>(new String[]{"A* Modification", "BFS", "DFS"});
 
     // parameters for right button
     this.downloadImage.addActionListener(new RightButtonController(this));

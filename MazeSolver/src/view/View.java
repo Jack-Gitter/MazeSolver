@@ -30,7 +30,6 @@ public class View implements ViewModel {
   private Box box3;
   private JLabel lLabel;
   private JLabel rLabel;
-  private JFileChooser jfcUnsolvedMazeChooser;
   private Image scaledUnsolvedMaze;
   private Image scaledSolvedMaze;
   private final JComboBox<String> algos;
@@ -63,11 +62,6 @@ public class View implements ViewModel {
     // initialize JComboBox
     this.algos = new JComboBox<String>(new String[]{"A* Modification", "BFS", "DFS"});
 
-    // initialize file chooser
-    this.jfcUnsolvedMazeChooser = new JFileChooser();
-    this.jfcUnsolvedMazeChooser.setCurrentDirectory(null);
-    this.jfcUnsolvedMazeChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-
     // initialize box layouts
     this.box2 = Box.createHorizontalBox();
     this.box1 = Box.createHorizontalBox();
@@ -99,12 +93,6 @@ public class View implements ViewModel {
     this.frame.setVisible(true);
 
   }
-
-  @Override
-  public JFileChooser getJfc() {
-    return this.jfcUnsolvedMazeChooser;
-  }
-
 
   @Override
   public JComboBox getAlgos() {

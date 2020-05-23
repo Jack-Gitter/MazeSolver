@@ -16,12 +16,6 @@ import javax.swing.JFrame;
 
 public interface ViewModel {
 
-  /**
-   * returns the file chooser.
-   * @return the file chooser.
-   */
-
-  public JFileChooser getJfc();
 
   /**
    * gets the algorithms supported by the program.

@@ -38,4 +38,14 @@ public interface ControllerModel {
 
   public void setButtonActionListener(JButton b);
 
+  /**
+   * Initializes the action listeners for the view.
+   */
+  public void initActionListeners();
+
+  /**
+   * Initializes the file chooser for the view.
+   */
+
+  public void initFileChooser();
 }

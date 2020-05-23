@@ -19,9 +19,10 @@ import model.*;
 
 public class Controller implements ControllerModel {
 
-  View v;
-  MazeModel m;
-  String currentUnsolved;
+  private View v;
+  private MazeModel m;
+  private String currentUnsolved;
+  private JFileChooser jfcUnsolvedMazeChooser;
 
   /**
    * creates an {@code Controller.Controller} instance.
@@ -35,6 +36,7 @@ public class Controller implements ControllerModel {
   }
 
 
+  @Override
   public void initActionListeners() {
     JButton[] buttons = this.v.getButtons();
     for (JButton b : buttons) {
@@ -43,12 +45,19 @@ public class Controller implements ControllerModel {
   }
 
   @Override
+  public void initFileChooser() {
+    this.jfcUnsolvedMazeChooser = new JFileChooser();
+    this.jfcUnsolvedMazeChooser.setCurrentDirectory(null);
+    this.jfcUnsolvedMazeChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+  }
+
+  @Override
   public void lefButtonClicked() {
-    if (this.v.getJfc().showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-      this.currentUnsolved = this.v.getJfc().getSelectedFile().getAbsolutePath().toString();
+    if (jfcUnsolvedMazeChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+      this.currentUnsolved = jfcUnsolvedMazeChooser.getSelectedFile().getAbsolutePath().toString();
       try {
         BufferedImage um = (ImageIO
-            .read(new File(this.v.getJfc().getSelectedFile().getAbsolutePath())));
+            .read(new File(jfcUnsolvedMazeChooser.getSelectedFile().getAbsolutePath())));
         this.v.updateLeftImage(um);
       } catch (IOException e) {
         return;
@@ -59,8 +68,8 @@ public class Controller implements ControllerModel {
   @Override
   public void rightButtonClicked() {
     if (m != null) {
-      if (v.getJfc().showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-        File f = new File(v.getJfc().getCurrentDirectory() + "/SolvedMaze.png");
+      if (jfcUnsolvedMazeChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+        File f = new File(jfcUnsolvedMazeChooser.getCurrentDirectory() + "/SolvedMaze.png");
         try {
           ImageIO.write((RenderedImage) m.retrieveSolvedMazeImg(), "png", f);
         } catch (IOException ioException) {
@@ -73,8 +82,8 @@ public class Controller implements ControllerModel {
   @Override
   public void middleButtonClicked() {
     try {
-      this.v.getJfc().setSelectedFile(new File(this.currentUnsolved));
-      this.m = new Maze(v.getJfc().getSelectedFile().getAbsolutePath());
+      this.jfcUnsolvedMazeChooser.setSelectedFile(new File(this.currentUnsolved));
+      this.m = new Maze(jfcUnsolvedMazeChooser.getSelectedFile().getAbsolutePath());
       if (this.v.getAlgos().getSelectedItem().toString().equals("A* Modification")) {
         this.m.solveMazePriorityQueue();
       } else if (this.v.getAlgos().getSelectedItem().toString().equals("BFS")){
